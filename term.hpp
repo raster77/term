@@ -51,7 +51,7 @@ struct Size {
     }
 
     bool operator != (const Size& sz) {
-        return rows != sz.rows && cols != sz.cols;
+        return rows != sz.rows || cols != sz.cols;
     }
 };
 
@@ -491,7 +491,7 @@ namespace cursor
 {
     /** @brief Set cursor on */
     constexpr std::string_view ON("\x1b[?25h");
-    /** @brief Set cursor of f*/
+    /** @brief Set cursor off */
     constexpr std::string_view OFF("\x1b[?25l");
     /** @brief Move cursor to row and col */
     template <unsigned int row, unsigned int col>
