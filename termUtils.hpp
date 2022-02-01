@@ -11,6 +11,9 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
 #endif
 
 #include "keys.hpp"
@@ -24,12 +27,12 @@ static constexpr tcflag_t TERM_FLAGS = ICANON | ECHO | ISIG | IEXTEN | ICRNL | I
 static const std::vector<char> CHARS({ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ';' });
 
 #ifdef _WIN32
-static constexpr unsigned char ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+//static constexpr unsigned char ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
 static HANDLE stdoutHandle;
 static HANDLE stdinHandle;
 static DWORD outModeInit;
 static DWORD inModeInit;
-static CONSOLE_FONT_INFOEX cfiOld = { sizeof(cfiOld) };
+static CONSOLE_FONT_INFOEX cfiOld = { sizeof(CONSOLE_FONT_INFOEX) };
 #endif
 
 #ifdef __linux__
@@ -75,7 +78,7 @@ term::Key getKeyCode(const std::vector<int>& buf)
         switch(buf[0]) {
 #ifdef _WIN32
         case 8:
-            return term::Key::Backspace;
+	  return term::Key::Backspace;
 #endif
         case 9:
             return term::Key::Tab;
